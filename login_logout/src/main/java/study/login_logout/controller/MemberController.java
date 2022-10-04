@@ -6,14 +6,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import study.login_logout.dto.MemberDTO;
 import study.login_logout.entity.Member;
 import study.login_logout.repository.MemberRepository;
+import study.login_logout.service.MemberService;
 
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     @GetMapping("/")
     public String welcome() {
@@ -22,14 +24,14 @@ public class MemberController {
 
     @GetMapping("/signupForm")
     public String signupForm(Model model) {
-        model.addAttribute("member", new Member());
+        model.addAttribute("memberDTO", new MemberDTO());
         return "signup/signupForm";
     }
 
     @PostMapping("/signupForm")
-    public String signup(@ModelAttribute Member member, Model model) {
-        memberRepository.save(member);
-        model.addAttribute("member", member);
+    public String signup(@ModelAttribute MemberDTO memberDTO, Model model) {
+        memberService.register(memberDTO);
+        model.addAttribute("memberDTO", memberDTO);
         return "/home";
     }
 
